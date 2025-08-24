@@ -1,0 +1,69 @@
+---
+title: "Market Basket Analysis Report"
+author: "Midhun"
+format: html
+editor: visual
+---
+
+# [Market Basket Analysis]{.underline}
+
+## 1.Introduction
+
+It is a method to understand the purchasing behavior or choice of customers.Based on the frequency of purchases and association of items(confidence)we can develop rules to predict the items customer basket.
+
+## 2. Example of Market Basket Analysis using Groceries_data set from Kaggle
+
+```{r echo=FALSE,message=FALSE,warning=FALSE}
+Groceries_data<-read.csv("C:/Users/midhu/OneDrive/Desktop/R Prgm/Groceries_dataset.csv") #importing the data 
+head(Groceries_data) #provides heads of data
+tail(Groceries_data)
+str(Groceries_data) #basic description of data
+length(unique(Groceries_data$Member_number))  #Selecting unique member number
+
+```
+
+The Groceries_data from the **Kaggle** has 38765 observations and 3 features including Member_number,Date of purchase, and items in the basket.The transaction data spans over 2 years(2014&2015). There are 3898 unique members in the transaction history.
+
+## 3.Association Rule
+
+### **Association Rule in Analytics**
+
+Association rule is a data mining technique used in analytics to identify interesting relationships, patterns, or associations among a large set of variables in data sets.
+
+```{r echo=FALSE,message=FALSE,warning=FALSE}
+#grouping  data using association rules
+library(dplyr) #calling the library
+transactions_data<-Groceries_data%>% 
+group_by(Member_number,Date)%>% #group data by number and data
+summarize(items=list(itemDescription),.groups="drop") #transforming the data according to the requirement of the library "arules"
+library(arules) #calling library
+#creat transactions object
+transactions_list <-as(transactions_data$items,"transactions")
+#create the association rules 
+rules<-apriori(transactions_list,parameter=list(supp=0.0005,conf=0.2,minlen=2))
+inspect (head(rules,10))
+
+
+```
+
+#### ***3.1 Interpretation***
+
+1\. Customers who buy artificial sweeteners also often buy whole milk.
+
+2.People buying spices often buy soda. This suggests soda is consumed with spiced/seasoned foods.
+
+3\. Shoppers who buy fabric softener also buys milk.
+
+4\. Customers who buy rolls or buns and white bread also buys whole milk.
+
+5\. Whole milk is also bought by people who buys housekeeping products,vegetables,brandy,margarine,curd and finished products.
+
+From the output we can conclude that whole milk is a central item which appears in 8 out of 10 observations. Milk is not just paired with food,but also with household products,showing its universal and wide demand.
+
+## 4.Conclusion
+
+The rules reveals **co-purchase patterns** in the dataset, i.e., which products tend to be bought together by the customers.
+
+The association rule mining performed on the data set successfully uncovered meaningful patterns in customer purchasing behavior. By grouping transactions and analyzing frequent item combinations, the model identified rules with significant support, confidence, and lift values, highlighting products that are often bought together. These insights can be effectively applied in retail decision-making for cross-selling, product bundling, store layout design, and targeted marketing strategies.
+
+Overall, the analysis demonstrates how market basket analysis serves as a powerful tool for transforming raw transaction data into actionable business knowledge.

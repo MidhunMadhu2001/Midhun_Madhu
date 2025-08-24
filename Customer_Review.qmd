@@ -1,0 +1,129 @@
+---
+title: "Customer Review Analysis Report"
+author: "Midhun"
+format: html
+editor: visual
+---
+
+# Customer Review Analysis
+
+## 1. Introduction
+
+Customer review analysis is the process of examining feedback provided by customers in the form of online reviews, surveys, comments, or social media posts to understand their experiences, opinions, and satisfaction levels with a product or service.
+
+Customer reviews are very essential information for business decisions.We use mining for extracting valuable information from the customer reviews.
+
+### 1.1 [Text Mining]{.underline}
+
+Text mining is the process of extracting meaningful information, patterns, and insights from **unstructured text data.**It is also called **text data mining** or **text analytics.**
+
+## 2. Data Pre-Processing
+
+We have to convert the unstructured data into structured format to apply descriptive statistics.
+
+```{r echo=FALSE,message=FALSE,warning=FALSE}
+reviews<-read.csv("C:/Users/midhu/OneDrive/Desktop/R Prgm/Review_analysis_mining.csv",header=TRUE) #importing the data
+text<-reviews$Review #selecting the text column
+```
+
+```{r echo=FALSE,message=FALSE,warning=FALSE}
+#calling the libraries
+library(tm)
+library(slam)
+library(proxy)
+library(wordcloud)
+library(RColorBrewer)
+```
+
+```{r echo=FALSE,message=FALSE,warning=FALSE}
+corpus <- VCorpus(VectorSource(text) )#creating the corpus
+```
+
+```{r echo=FALSE,message=FALSE,warning=FALSE}
+#Processing the Text
+corpus <- tm_map(corpus, content_transformer(tolower))
+corpus <- tm_map(corpus, removePunctuation)
+corpus <- tm_map(corpus, removeNumbers)
+corpus <- tm_map(corpus, removeWords, stopwords("en"))
+corpus <- tm_map(corpus, stripWhitespace)
+```
+
+## 3. Document Term Matrix
+
+It is a common representation used to structure textual data for analysis.
+
+```{r echo=FALSE,message=FALSE,warning=FALSE}
+dtm <-DocumentTermMatrix(corpus)
+inspect(dtm)
+```
+
+## 4. Cosine Distance
+
+Cosine distance is a metric used to measure how **different** two vectors are in terms of their **orientation.**
+
+```{r echo=FALSE,message=FALSE,warning=FALSE}
+
+numerator <- crossprod_simple_triplet_matrix(dtm)
+denominator <- sqrt(col_sums(dtm^2)) %*% t(sqrt(col_sums(dtm^2)))
+cosine_similarity <- numerator / denominator
+cosine_distance <- 1 - cosine_similarity
+```
+
+```{r echo=FALSE,message=FALSE,warning=FALSE}
+#Convert to Matrix for Inspection or Plotting
+
+cosine_dist_matrix <- as.matrix(cosine_distance)
+#print(round(cosine_dist_matrix, 2))
+```
+
+Using the cosine distance, the similarities in the data sets are found out and interpreted.
+
+## 5. Clustering
+
+Hierarchichal Clustering is carried out and dendrogram is prepared to show the groupings.
+
+```{r echo=FALSE,message=FALSE,warning=FALSE}
+###  Step 8: Cluster the Documents (Optional Extension)
+library(proxy)
+dtm_matrix <- as.matrix(dtm)  # Convert sparse DTM to full matrix
+dist_obj <- proxy::dist(dtm_matrix, method = "cosine")  # Proper cosine distance
+
+hclust_obj <- hclust(dist_obj, method = "ward.D2")
+plot(hclust_obj, labels = paste("Doc", 1:nrow(dtm_matrix)), main = "Document Clustering")
+
+```
+
+## 6. Word Cloud
+
+A word cloud is used to visualize the **most frequently occurring words** within a collection of documents or feedback. Larger and bolder words indicate higher frequency or importance, while smaller words represent less frequent terms.
+
+```{r echo=FALSE,message=FALSE,warning=FALSE}
+# Convert DTM to matrix and compute word frequencies
+m <- as.matrix(dtm)
+v <- sort(colSums(m), decreasing = TRUE)
+d <- data.frame(word = names(v), freq = v)
+
+
+set.seed(123)  # for reproducibility
+wordcloud(
+  words = d$word,
+  freq = d$freq,
+  min.freq = 1,
+  max.words = 100,
+  random.order = FALSE,
+  rot.per = 0.35,
+  colors = brewer.pal(8, "Dark2")
+)
+```
+
+[**Interpretation**]{.underline}
+
+Terms such as “pizza,” “good,” “food,” “great,” “dish,” “sauce,” “service,” and “best” appear prominently, suggesting that these are the most commonly mentioned aspects in customer reviews. Positive adjectives like *“great,” “good,” “best,” and “delicious”* indicate generally favorable sentiment, while words like *“service,” “prices,” and “place”* reflect common themes discussed by customers regarding their dining experience.The presence of specific food items such as *“chicken,” “lasagna,” “manicotti,” “alfredo,” and “mussels”* shows that customers frequently mention particular dishes, which may highlight menu preferences or popular offerings.
+
+While the majority of terms in the word cloud are positive,there are a few negative words that reflect customer dissatisfaction like bad,lousy,slow,filthy etc. The company will be able to identify the defects and take appropriate measures or actions to improve the satisfaction of the customers.
+
+## 7.Conclusion
+
+The review analysis conducted through text mining techniques highlights valuable insights into customer perceptions, preferences, and pain points. By transforming unstructured feedback into structured knowledge using methods such as word cloud and clustering, businesses can quickly identify key themes like product quality, service experience, and pricing concerns.
+
+Overall, text mining proves to be an effective tool for turning large volumes of customer reviews into actionable insights, enabling organizations to improve decision-making, enhance customer satisfaction, and strengthen competitive advantage.
