@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Midhun Madhu">
+
+<title>ESG PERFORMANCE GROWTH OF INDIAN COMPANIES</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="ESG_files/libs/clipboard/clipboard.min.js"></script>
+<script src="ESG_files/libs/quarto-html/quarto.js"></script>
+<script src="ESG_files/libs/quarto-html/popper.min.js"></script>
+<script src="ESG_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="ESG_files/libs/quarto-html/anchor.min.js"></script>
+<link href="ESG_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="ESG_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="ESG_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="ESG_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="ESG_files/libs/bootstrap/bootstrap-1bc8a17f135ab3d594c857e9f48e611b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">ESG PERFORMANCE GROWTH OF INDIAN COMPANIES</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Midhun Madhu </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="regression-report-on-esg-components--analysis-of-indian-companies" class="level1">
+<h1><u>Regression Report on ESG Components -Analysis of Indian Companies</u></h1>
+</section>
+<section id="introduction" class="level1">
+<h1>1. Introduction</h1>
+<p>This report investigates the impact of <strong>ESG components—specifically carbon emissions, energy consumption, and employee turnover</strong> <strong>on the financial performance of Indian companies, measured through ROA and ROE.</strong> Using regression analysis, the study evaluates the significance of these factors while also considering the influence of industry type and geographic location, offering a comprehensive view of how environmental and social dimensions shape corporate outcomes in the Indian context.</p>
+</section>
+<section id="data-exploration" class="level1">
+<h1>2. Data Exploration</h1>
+<p>The data is collected and documented based on information published by the companies in their Annual Reports and Business Sustainability Reports.</p>
+<p>Data of 12 Indian companies is taken with 51 observations in total.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>      S.No         COMPANY               YEAR            CE          
+ Min.   : 1.00   Length:51          Min.   :2020   Min.   :   131.0  
+ 1st Qu.: 3.75   Class :character   1st Qu.:2022   1st Qu.:   713.7  
+ Median : 6.50   Mode  :character   Median :2023   Median :  7256.1  
+ Mean   : 6.50                      Mean   :2023   Mean   : 51656.6  
+ 3rd Qu.: 9.25                      3rd Qu.:2024   3rd Qu.: 13581.0  
+ Max.   :12.00                      Max.   :2025   Max.   :504367.0  
+ NA's   :39                                                          
+       EC                ETO             ROA             ROE        
+ Min.   :     612   Min.   : 0.00   Min.   :-7.93   Min.   :-41.32  
+ 1st Qu.:    4733   1st Qu.: 9.41   1st Qu.: 4.06   1st Qu.: 10.46  
+ Median :  122277   Median :15.00   Median : 8.56   Median : 14.23  
+ Mean   :10632744   Mean   :18.13   Mean   :10.19   Mean   : 16.22  
+ 3rd Qu.: 3693483   3rd Qu.:24.39   3rd Qu.:14.14   3rd Qu.: 20.00  
+ Max.   :95000000   Max.   :85.00   Max.   :55.18   Max.   : 63.85  
+                                                                    
+   INDUSTRY           LOCATION             CEO             CEO GENDER       
+ Length:51          Length:51          Length:51          Length:51         
+ Class :character   Class :character   Class :character   Class :character  
+ Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+                                                                            
+                                                                            
+                                                                            
+                                                                            </code></pre>
+</div>
+</div>
+</section>
+<section id="regression-analysis" class="level1">
+<h1>3. Regression Analysis</h1>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 12
+   S.No COMPANY     YEAR     CE     EC   ETO   ROA   ROE INDUSTRY LOCATION CEO  
+  &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;
+1     1 Gland Pha…  2021 15874  8.70e7    18 15.3   21   Pharmac… Hyderab… Shya…
+2    NA Gland Pha…  2022 12579. 7.80e7    20 15.5   19   Pharmac… Hyderab… Shya…
+3    NA Gland Pha…  2023 11930. 8.86e7    20  8.84  11   Pharmac… Hyderab… Shya…
+4    NA Gland Pha…  2024 15736  9.2 e7    23 10.9   12   Pharmac… Hyderab… Shya…
+5    NA Gland Pha…  2025 13920  9.5 e7    14 10.4   12   Pharmac… Hyderab… Shya…
+6     2 Manorama …  2021   171  1.82e5     3  7.34  12.6 Manufac… Mumbai   Ashi…
+# ℹ 1 more variable: `CEO GENDER` &lt;chr&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      S.No         COMPANY               YEAR            CE          
+ Min.   : 1.00   Length:51          Min.   :2020   Min.   :   131.0  
+ 1st Qu.: 3.75   Class :character   1st Qu.:2022   1st Qu.:   713.7  
+ Median : 6.50   Mode  :character   Median :2023   Median :  7256.1  
+ Mean   : 6.50                      Mean   :2023   Mean   : 51656.6  
+ 3rd Qu.: 9.25                      3rd Qu.:2024   3rd Qu.: 13581.0  
+ Max.   :12.00                      Max.   :2025   Max.   :504367.0  
+ NA's   :39                                                          
+       EC                ETO             ROA             ROE        
+ Min.   :     612   Min.   : 0.00   Min.   :-7.93   Min.   :-41.32  
+ 1st Qu.:    4733   1st Qu.: 9.41   1st Qu.: 4.06   1st Qu.: 10.46  
+ Median :  122277   Median :15.00   Median : 8.56   Median : 14.23  
+ Mean   :10632744   Mean   :18.13   Mean   :10.19   Mean   : 16.22  
+ 3rd Qu.: 3693483   3rd Qu.:24.39   3rd Qu.:14.14   3rd Qu.: 20.00  
+ Max.   :95000000   Max.   :85.00   Max.   :55.18   Max.   : 63.85  
+                                                                    
+   INDUSTRY           LOCATION             CEO             CEO GENDER       
+ Length:51          Length:51          Length:51          Length:51         
+ Class :character   Class :character   Class :character   Class :character  
+ Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+                                                                            
+                                                                            
+                                                                            
+                                                                            </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>==== Regression Model: ROA ====</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ROA ~ EC + CE + ETO, data = ESG)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-14.844  -5.565  -2.919   3.305  47.002 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  1.085e+01  2.354e+00   4.610  3.1e-05 ***
+EC           2.976e-08  5.419e-08   0.549    0.585    
+CE           2.950e-06  1.058e-05   0.279    0.782    
+ETO         -6.254e-02  8.995e-02  -0.695    0.490    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 10.05 on 47 degrees of freedom
+Multiple R-squared:  0.01899,   Adjusted R-squared:  -0.04362 
+F-statistic: 0.3033 on 3 and 47 DF,  p-value: 0.8228</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+==== Regression Model: ROE ====</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ROE ~ EC + CE + ETO, data = ESG)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-43.231  -8.026  -2.193   3.639  55.237 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  2.291e+01  3.605e+00   6.355 7.79e-08 ***
+EC          -2.060e-08  8.298e-08  -0.248   0.8050    
+CE          -8.356e-06  1.620e-05  -0.516   0.6083    
+ETO         -3.333e-01  1.377e-01  -2.420   0.0195 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 15.39 on 47 degrees of freedom
+Multiple R-squared:  0.1124,    Adjusted R-squared:  0.05576 
+F-statistic: 1.984 on 3 and 47 DF,  p-value: 0.1292</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+==== VIF Check for ROA ====</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      EC       CE      ETO 
+1.003395 1.014553 1.012010 </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+==== VIF Check for ROE ====</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      EC       CE      ETO 
+1.003395 1.014553 1.012010 </code></pre>
+</div>
+</div>
+<section id="interpretation" class="level3">
+<h3 class="anchored" data-anchor-id="interpretation"><u>Interpretation</u></h3>
+<section id="regression-results-for-roa" class="level4">
+<h4 class="anchored" data-anchor-id="regression-results-for-roa">3.1 <u>Regression Results for <strong>ROA</strong></u></h4>
+<ul>
+<li><p><strong>Intercept = 10.85</strong> - Baseline ROA when EC, CE, and ETO are zero.</p></li>
+<li><p><strong>EC, CE, and ETO</strong> - <strong>All p-values &gt; 0.05 -Not statistically significant.</strong></p></li>
+<li><p><strong>R² = 0.019</strong> - Only ~1.9% of variation in ROA is explained <strong>- Model is weak</strong></p>
+<p><strong>Conclusion</strong>: <strong>ROA is not strongly related to EC, CE, or ETO in your data.</strong></p></li>
+</ul>
+</section>
+<section id="regression-results-for-roe" class="level4">
+<h4 class="anchored" data-anchor-id="regression-results-for-roe">3.2 <u>Regression Results for <strong>ROE</strong></u></h4>
+<ul>
+<li><p><strong>Intercept = 22.91</strong> - Baseline ROE.</p></li>
+<li><p><strong>ETO (Employee Turnover)</strong> - <strong>Significant (p = 0.0195).</strong></p></li>
+<li><p>Negative coefficient = <strong>higher employee turnover reduces ROE</strong>.</p></li>
+<li><p><strong>EC, CE</strong> - Not significant.</p></li>
+<li><p><strong>R² = 0.112</strong> - <strong>Model explains ~11% of variation.</strong></p>
+<p><strong>It is still weak, but slightly better than ROA model.</strong></p></li>
+</ul>
+<p><u><strong>Conclusion</strong></u></p>
+<p>ROE is somewhat affected by ETO (negatively), while EC and CE don’t show meaningful impact in this data set.</p>
+</section>
+</section>
+<section id="multicollinearity-vif" class="level3">
+<h3 class="anchored" data-anchor-id="multicollinearity-vif"><u>Multicollinearity (VIF)</u></h3>
+<p>All VIF &lt; 2 -No multicollinearity issues.</p>
+<p>So, overall</p>
+<ul>
+<li><p><strong>Employee turnover (ETO)</strong> has a <strong>negative effect on ROE</strong>, but not on ROA.</p></li>
+<li><p><strong>Carbon emissions (CE)</strong> and <strong>energy consumption (EC)</strong> don’t show significant relationships with either ROA or ROE (at least with your sample size &amp; data).</p></li>
+</ul>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>==== Regression Model: ROA (Log-Transformed) ====</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ROA ~ log_EC + log_CE + ETO, data = ESG)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-13.515  -5.335  -2.001   4.002  47.066 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)  3.14577    6.79828   0.463    0.646
+log_EC      -0.02400    0.49301  -0.049    0.961
+log_CE       0.96178    0.73786   1.303    0.199
+ETO         -0.04381    0.09638  -0.455    0.652
+
+Residual standard error: 9.857 on 47 degrees of freedom
+Multiple R-squared:  0.05697,   Adjusted R-squared:  -0.003221 
+F-statistic: 0.9465 on 3 and 47 DF,  p-value: 0.4258</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+==== Regression Model: ROE (Log-Transformed) ====</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ROE ~ log_EC + log_CE + ETO, data = ESG)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-40.855  -6.932  -4.307   5.236  55.912 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)  
+(Intercept)  20.9252    10.4400   2.004   0.0508 .
+log_EC       -0.8602     0.7571  -1.136   0.2617  
+log_CE        1.4551     1.1331   1.284   0.2054  
+ETO          -0.3694     0.1480  -2.496   0.0161 *
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 15.14 on 47 degrees of freedom
+Multiple R-squared:  0.1419,    Adjusted R-squared:  0.08708 
+F-statistic:  2.59 on 3 and 47 DF,  p-value: 0.06391</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+==== VIF Check (Log Models) ====</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  log_EC   log_CE      ETO 
+1.673581 1.435948 1.208726 </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  log_EC   log_CE      ETO 
+1.673581 1.435948 1.208726 </code></pre>
+</div>
+</div>
+<section id="roa-log-transformed-model" class="level4">
+<h4 class="anchored" data-anchor-id="roa-log-transformed-model"><u><strong>ROA (log-transformed model)</strong></u></h4>
+<ul>
+<li><p><strong>None of the predictors (log_EC, log_CE, ETO) are significant</strong></p></li>
+<li><p>R² = 0.057 - only ~5.7% of ROA variation explained.<br>
+</p>
+<p><strong>Conclusion</strong>: ROA still doesn’t show meaningful dependence on EC, CE, or ETO in this data set.</p></li>
+</ul>
+</section>
+<section id="roe-log-transformed-model" class="level4">
+<h4 class="anchored" data-anchor-id="roe-log-transformed-model"><u><strong>ROE (log-transformed model)</strong></u></h4>
+<ul>
+<li><p><strong>ETO (Employee Turnover)</strong> is <strong>significant (p = 0.016)</strong>, negative coefficient (−0.369).<br>
+Higher turnover clearly reduces ROE.</p></li>
+<li><p><strong>log_CE and log_EC</strong> - <strong>not significant</strong>, but log_CE shows a <strong>positive direction</strong> (coef ≈ 1.46).</p></li>
+<li><p><strong>R² = 0.14</strong> - ~14% of variation explained (better than raw model).</p></li>
+<li><p><strong>Intercept ~20.9 (p = 0.05)</strong> - baseline ROE even when predictors are low.</p></li>
+</ul>
+</section>
+<section id="conclusion" class="level4">
+<h4 class="anchored" data-anchor-id="conclusion"><u><strong>Conclusion</strong></u></h4>
+<ul>
+<li><p>ROE is sensitive to workforce stability,which is Employee Turnover Rate.</p></li>
+<li><p>Carbon emissions (log_CE) might have a weak positive association with ROE, but not strong enough to be significant with this sample size.</p></li>
+<li><p>Energy consumption (log_EC) has no meaningful effect.</p></li>
+<li><p>VIF check</p></li>
+<li><p>All VIF &lt; 2 - No multicollinearity issue</p></li>
+<li><p>Employee turnover rate (ETO) consistently hurts ROE.</p></li>
+<li><p>Carbon emissions (CE) might weakly support ROE (possibly larger firms have both higher emissions and higher returns).</p></li>
+<li><p>Energy consumption (EC) doesn’t matter much.</p></li>
+<li><p>ROA isn’t explained well by these variables.</p></li>
+</ul>
+</section>
+<section id="adding-dummy-variables" class="level4">
+<h4 class="anchored" data-anchor-id="adding-dummy-variables"><u>Adding Dummy Variables</u></h4>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>==== Regression Model: ROA with Dummies ====</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ROA ~ log_EC + log_CE + ETO + Industry + Location, 
+    data = ESG)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-11.469  -3.793  -0.776   2.291  32.497 
+
+Coefficients: (5 not defined because of singularities)
+                         Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)              54.61450   27.27396   2.002 0.052814 .  
+log_EC                   -0.35213    1.02824  -0.342 0.733998    
+log_CE                   -9.74297    3.80169  -2.563 0.014709 *  
+ETO                      -0.05356    0.17713  -0.302 0.764111    
+IndustryClassifieds      45.14110   12.36185   3.652 0.000822 ***
+IndustryClothing         29.87745    9.04920   3.302 0.002177 ** 
+IndustryHome Decor       92.63612   32.88102   2.817 0.007815 ** 
+IndustryHome Décor       89.03053   31.42969   2.833 0.007515 ** 
+IndustryManufacturing    36.95622   16.53701   2.235 0.031731 *  
+IndustryNBFC             12.97269   11.00829   1.178 0.246349    
+IndustryPharmaceuticals  46.20695   14.80471   3.121 0.003542 ** 
+LocationBengaluru        35.87422   13.43301   2.671 0.011293 *  
+LocationBhubaneswar      18.29131    7.70514   2.374 0.023056 *  
+LocationGurugram               NA         NA      NA       NA    
+LocationHyderabad        11.11392   10.79331   1.030 0.310018    
+LocationKolkatta               NA         NA      NA       NA    
+LocationMumbai          -27.90823   13.82793  -2.018 0.051064 .  
+LocationNew Delhi              NA         NA      NA       NA    
+LocationNoida                  NA         NA      NA       NA    
+LocationUttar Pradesh          NA         NA      NA       NA    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 7.675 on 36 degrees of freedom
+Multiple R-squared:  0.562, Adjusted R-squared:  0.3917 
+F-statistic:   3.3 on 14 and 36 DF,  p-value: 0.001943</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+==== Regression Model: ROE with Dummies ====</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ROE ~ log_EC + log_CE + ETO + Industry + Location, 
+    data = ESG)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-25.683  -4.693   0.000   2.634  39.323 
+
+Coefficients: (5 not defined because of singularities)
+                        Estimate Std. Error t value Pr(&gt;|t|)   
+(Intercept)              90.3364    40.2465   2.245  0.03103 * 
+log_EC                   -0.3715     1.5173  -0.245  0.80795   
+log_CE                  -13.7369     5.6099  -2.449  0.01934 * 
+ETO                      -0.4211     0.2614  -1.611  0.11590   
+IndustryClassifieds      56.5301    18.2416   3.099  0.00376 **
+IndustryClothing         36.3612    13.3534   2.723  0.00991 **
+IndustryHome Decor      116.3061    48.5205   2.397  0.02184 * 
+IndustryHome Décor      113.7977    46.3789   2.454  0.01911 * 
+IndustryManufacturing    44.4489    24.4027   1.821  0.07685 . 
+IndustryNBFC             16.3564    16.2443   1.007  0.32070   
+IndustryPharmaceuticals  61.8274    21.8464   2.830  0.00756 **
+LocationBengaluru        57.9215    19.8223   2.922  0.00597 **
+LocationBhubaneswar      22.6725    11.3700   1.994  0.05376 . 
+LocationGurugram              NA         NA      NA       NA   
+LocationHyderabad         7.4565    15.9270   0.468  0.64249   
+LocationKolkatta              NA         NA      NA       NA   
+LocationMumbai          -42.6527    20.4050  -2.090  0.04371 * 
+LocationNew Delhi             NA         NA      NA       NA   
+LocationNoida                 NA         NA      NA       NA   
+LocationUttar Pradesh         NA         NA      NA       NA   
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 11.33 on 36 degrees of freedom
+Multiple R-squared:  0.632, Adjusted R-squared:  0.4889 
+F-statistic: 4.416 on 14 and 36 DF,  p-value: 0.0001595</code></pre>
+</div>
+</div>
+</section>
+<section id="model-fit" class="level4">
+<h4 class="anchored" data-anchor-id="model-fit"><u><strong>Model Fit</strong></u></h4>
+<ul>
+<li><u><strong>ROA model</strong></u></li>
+</ul>
+<p>R² = 0.562 (≈56% variance explained), <strong>Adjusted R² = 0.392 - moderate fit.</strong></p>
+<ul>
+<li><u><strong>ROE model</strong></u></li>
+</ul>
+<p>R² = 0.632 (≈63% variance explained), <strong>Adjusted R² = 0.489 - stronger fit than ROA.</strong></p>
+<p>So, the model predicts <strong>ROE better than ROA</strong>.</p>
+</section>
+</section>
+<section id="key-findings" class="level2">
+<h2 class="anchored" data-anchor-id="key-findings"><u><strong>4.Key Findings</strong></u></h2>
+<section id="core-financial-variables" class="level4">
+<h4 class="anchored" data-anchor-id="core-financial-variables">4.1 <u><strong>Core financial variables</strong></u></h4>
+<ul>
+<li><p><strong>log_EC (Energy Consumption, logged)</strong> - Not significant in both models.</p></li>
+<li><p><strong>log_CE (Carbon Emissions, logged)</strong> - Significant <strong>negative</strong> effect in both models:</p>
+<ul>
+<li><p>ROA: −9.74 (p = 0.015)</p>
+<p>ROE: −13.74 (p = 0.019)<br>
+Higher carbon emissions reduce financial performance.</p></li>
+</ul>
+<p><strong>ETO (Employee-to-Rate ratio)</strong> - Not significant.</p></li>
+</ul>
+</section>
+<section id="industry-effects" class="level4">
+<h4 class="anchored" data-anchor-id="industry-effects">4.2 <u>Industry effects</u></h4>
+<p><strong>Classifieds, Clothing, Home Decor, Manufacturing, Pharmaceuticals</strong> have significant <strong>positive impact</strong> on ROA and ROE.</p>
+<ul>
+<li><strong>NBFC (Non-Banking Finance Company)</strong> - Positive but not significant.</li>
+</ul>
+</section>
+<section id="location-effects" class="level4">
+<h4 class="anchored" data-anchor-id="location-effects">4.3 <u><strong>Location effects</strong></u></h4>
+<ul>
+<li><p><strong>Bengaluru</strong> - Strong positive effect on both ROA (+35.9) and ROE (+57.9).</p></li>
+<li><p><strong>Bhubaneswar</strong> - Positive, significant for ROA (+18.3) and borderline for ROE (+22.7, p ≈ 0.054).</p></li>
+<li><p><strong>Mumbai</strong> - Negative, borderline for ROA (−27.9, p = 0.051), significant for ROE (−42.6, p = 0.044).</p></li>
+<li><p><strong>Hyderabad</strong> - Not significant.</p></li>
+</ul>
+<p>Firms in <strong>Bengaluru &amp; Bhubaneswar outperform</strong>, while <strong>Mumbai underperform</strong> relative to the baseline.</p>
+</section>
+</section>
+<section id="conclusion-1" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion-1"><strong>5.<u>Conclusion</u></strong></h2>
+<p>The overall analysis highlights that <strong>carbon emissions adversely affect company performance, exerting a negative influence on both ROA and ROE</strong>. Beyond environmental factors, structural aspects such as industry type and location play a significant role in shaping financial outcomes.</p>
+<p>Among the selected industries, Home Decor, Clothing, Classifieds, and Pharma emerge as the strongest performers, reflecting sectors with better resilience or efficiency in managing ESG challenges.</p>
+<p>Geographically, Banglore based companies demonstrate the best performance, while Mumbai-based firms lag behind, underscoring the importance of regional dynamics in determining ESG-driven financial performance.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
