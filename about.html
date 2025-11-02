@@ -4,52 +4,159 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About Me - My Assignment Blog</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
   <style>
-    body {
-      font-family: Arial, sans-serif;
+    html, body {
       margin: 0;
-      padding: 40px;
-      background: #fff;
-      color: #333;
-      line-height: 1.6;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: "Poppins", sans-serif;
+      color: #00ff9c;
     }
-    header {
+
+    /* 🟩 Matrix Background Canvas */
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: black;
+    }
+
+    /* 💬 Main Content */
+    .content {
+      position: relative;
+      z-index: 10;
+      padding: 40px 25px;
       text-align: center;
+      color: #b6ffd7;
+      max-width: 900px;
+      margin: 0 auto;
+      overflow-y: auto;
+      height: 100vh;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    header {
       margin-bottom: 30px;
     }
+
     h1 {
-      color: #2575fc;
+      font-size: 2.5rem;
+      color: #00ff9c;
+      text-shadow: 0 0 15px #00ff9c;
+      margin-bottom: 10px;
     }
+
     p {
-      max-width: 700px;
-      margin: 10px auto;
+      max-width: 750px;
+      margin: 15px auto;
       font-size: 1.1rem;
+      line-height: 1.8;
+      color: #a8ffd4;
+      background: rgba(0, 255, 156, 0.05);
+      border: 1px solid rgba(0, 255, 156, 0.2);
+      border-radius: 12px;
+      padding: 15px 20px;
+      box-shadow: 0 0 10px rgba(0, 255, 156, 0.1);
+      backdrop-filter: blur(5px);
     }
+
     nav {
       margin-top: 30px;
       text-align: center;
     }
-    a {
+
+    nav a {
       text-decoration: none;
-      color: #2575fc;
-      font-weight: bold;
+      color: #00ff9c;
+      padding: 10px 25px;
+      border: 1px solid rgba(0, 255, 156, 0.3);
+      border-radius: 30px;
+      transition: all 0.3s ease;
+    }
+
+    nav a:hover {
+      background: #00ff9c;
+      color: black;
+      box-shadow: 0 0 15px #00ff9c;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 2rem; }
+      p { font-size: 1rem; }
     }
   </style>
 </head>
+
 <body>
-  <header>
-    <h1>👤 About Me</h1>
-  </header>
+  <!-- 🟩 Matrix Background -->
+  <canvas id="matrix"></canvas>
 
-  <p> Hello, Iam MIDHUN MADHU currently persuing MBA at Amrita Viswa Vidyapeetham,Coimbatore.I have also completed Masters in Commerce from Amrita Viswa Vidyapeetham,Kochi. This website is created to be used to post my academic assignments and projects as blogs..</p> 
+  <!-- 💬 Page Content -->
+  <div class="content">
+    <header>
+      <h1>👤 About Me</h1>
+    </header>
 
-  <p>Iam interested in exploring opportunities in the field of finance and banking domains.  </p>
+    <p>Hello, I’m <strong>Midhun Madhu</strong>, currently pursuing an MBA at <strong>Amrita Vishwa Vidyapeetham, Coimbatore</strong>. I have also completed my Masters in Commerce from Amrita Vishwa Vidyapeetham, Kochi. This website serves as a platform to showcase my academic assignments and projects.</p>
 
-  <p>In this webspace, I will share my assignments and projects I will be carrying out in my entire academic journey.My goal is to make learning more interactive, resourceful, and accessible, not only for myself but also for anyone who might find value in these posts.</p>
+    <p>I’m deeply interested in exploring opportunities in the fields of <strong>finance and banking</strong>, and how technology continues to reshape these domains.</p>
 
-  <nav>
-    <a href="index.html">⬅ Back to Home</a>
-  </nav>
+    <p>In this webspace, I share my academic work and learning journey. My goal is to make education more interactive, insightful, and accessible — both for myself and for others who may find value in these posts.</p>
+
+    <nav>
+      <a href="index.html">⬅ Back to Home</a>
+    </nav>
+  </div>
+
+  <!-- 🧠 Matrix Rain Script -->
+  <script>
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
+
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+
+    const letters = "アァカサタナハマヤャラワン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = Array(Math.floor(columns)).fill(1);
+
+    function draw() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#00ff9c";
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters[Math.floor(Math.random() * letters.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setInterval(draw, 33);
+
+    window.addEventListener("resize", () => {
+      canvas.height = window.innerHeight;
+      canvas.width = window.innerWidth;
+    });
+  </script>
 </body>
 </html>
+
+
 
